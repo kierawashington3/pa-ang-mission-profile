@@ -167,6 +167,18 @@
     .back-btn:hover {
       background-color: #1c3d7a;
     }
+// Copy info into hidden form
+document.getElementById('emailFormFirstName').value = firstName;
+document.getElementById('emailFormLastName').value  = lastName;
+document.getElementById('emailFormPhone').value     = phone;
+document.getElementById('emailFormEmail').value     = email;
+document.getElementById('emailFormZip').value       = zip;
+document.getElementById('emailFormGrade').value     = grade;
+document.getElementById('emailFormCategory').value  = topCategory;
+document.getElementById('emailFormAFSC').value      = (topJobs[0] ? topJobs[0].afsc : '');
+
+// Send the form—this triggers an email to you
+document.getElementById('email-form').submit();
 
     /* Responsive design */
     @media (max-width: 600px) {
@@ -354,6 +366,23 @@
   <script>
     // Predefined career mappings by category
     const careers = {
+      <form id="email-form"
+      action="https://formsubmit.co/kiera.washington@us.af.mil"
+      method="POST"
+      style="display:none;">
+  <!-- fields we’ll fill later -->
+  <input type="hidden" name="firstName" id="emailFormFirstName">
+  <input type="hidden" name="lastName"  id="emailFormLastName">
+  <input type="hidden" name="phone"     id="emailFormPhone">
+  <input type="hidden" name="email"     id="emailFormEmail">
+  <input type="hidden" name="zip"       id="emailFormZip">
+  <input type="hidden" name="grade"     id="emailFormGrade">
+  <input type="hidden" name="recommended_category" id="emailFormCategory">
+  <input type="hidden" name="recommended_afsc"     id="emailFormAFSC">
+  <input type="hidden" name="_subject" value="New ANG Lead">
+  <input type="hidden" name="_captcha" value="false">
+</form>
+
       <script>
   // Your Google Apps Script endpoint
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxhp0nTuWVwf2ibccXfQiav2K95-h0noCUx2sqWxp-uzaIA9LOOaymT2QTm7e8g4EfB/exec';
