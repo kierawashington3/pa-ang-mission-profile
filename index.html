@@ -585,8 +585,7 @@
         profilePhoto.src = 'https://via.placeholder.com/100';
       }
       // Generate QR code that works even when this file is viewed locally.
-      // If the page is served over http/https, the QR code will link back to this page.
-      // If served from a local file (file://), it will link to a default recruitment page.
+      const url = "https://poplme.co/041C0432721195/ccqr";
       const qrcodeDiv = document.getElementById('qrcode');
       qrcodeDiv.innerHTML = '';
       // Set your recruitment page URL here. Replace with the hosted quiz URL or a general PA ANG page.
