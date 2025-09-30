@@ -354,6 +354,12 @@
   <script>
     // Predefined career mappings by category
     const careers = {
+      <script>
+  // Your Google Apps Script endpoint
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxhp0nTuWVwf2ibccXfQiav2K95-h0noCUx2sqWxp-uzaIA9LOOaymT2QTm7e8g4EfB/exec';
+  …
+</script>
+
       aviation: {
         name: "1A1X1 – Flight Engineer",
         title: "Flight Engineer",
@@ -594,6 +600,28 @@
       });
 
       // Save lead information to local storage for tracking
+  // Assemble the lead data to send to the Sheet
+const leadData = {
+  // Send lead to Google Sheet
+fetch(WEB_APP_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(leadData)
+})
+.then(response => response.text())
+.then(text => console.log('Lead saved:', text))
+.catch(err => console.error('Error saving lead:', err));
+
+  firstName: firstName,
+  lastName: lastName,
+  phone: phone,
+  email: email,
+  zip: zip,
+  grade: grade,
+  recommended_category: topCategory,
+  recommended_afsc: topJobs.length > 0 ? topJobs[0].afsc : ''
+};
+
       try {
         const leads = JSON.parse(localStorage.getItem('pa_ang_leads') || '[]');
         leads.push({
