@@ -7,30 +7,25 @@
   <!-- Include QRCode.js from CDN for generating QR codes on the mission card -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-  .heading-with-logo {
-  display: flex;
-  align-items: center;      /* vertically centers text and logo */
-  justify-content: center;  /* keeps everything centered in the card */
-  gap: 8px;                 /* spacing between text and logo */
-}
+    .heading-with-logo {
+      display: flex;
+      align-items: center;      /* vertically centers text and logo */
+      justify-content: center;  /* keeps everything centered in the card */
+      gap: 6px;                 /* spacing between text and logo */
+    }
 
-.heading-with-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px; /* tighter spacing so it doesn’t float away */
-}
+    .af-logo-inline {
+      height: 20px !important;   /* lock the logo to text height */
+      width: auto !important;    /* keep proportions */
+      max-height: 20px !important;
+      max-width: none !important;
+      flex: 0 0 auto !important;
+      display: inline-block !important;
+      object-fit: contain !important;
+    }
+  </style>
+</head>
 
-
-/* Keep logo modest in size */
-.af-logo-inline {
-  height: 20px !important;   /* force the symbol to stay small */
-  width: auto !important;    /* maintain proportions */
-  flex: 0 0 auto !important; /* prevent stretching */
-  display: inline-block !important;
-}
-
-}
 
 
 
@@ -349,6 +344,7 @@
   <h2 class="heading-with-logo">
 <h2 class="heading-with-logo">
  <h2 class="heading-with-logo">
+<h2 class="heading-with-logo">
   <span>Your Mission Profile</span>
   <img
     src="https://www.pngall.com/wp-content/uploads/13/Air-Force-Logo-PNG-Clipart.png"
