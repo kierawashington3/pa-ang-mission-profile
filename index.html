@@ -14,16 +14,22 @@
   gap: 8px;                 /* spacing between text and logo */
 }
 
-.heading-with-logo span {
-  font-size: clamp(18px, 3vw, 24px);
-  font-weight: 600;
+.heading-with-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* tighter spacing so it doesn’t float away */
 }
+
 
 /* Keep logo modest in size */
 .af-logo-inline {
-  height: 28px;    /* fixed height so it matches text size */
-  width: auto;     /* keeps proportions correct */
-  flex: 0 0 auto;  /* stops stretching */
+  height: 20px !important;   /* force the symbol to stay small */
+  width: auto !important;    /* maintain proportions */
+  flex: 0 0 auto !important; /* prevent stretching */
+  display: inline-block !important;
+}
+
 }
 
 
