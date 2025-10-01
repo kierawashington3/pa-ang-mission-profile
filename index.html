@@ -1,230 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PA Air National Guard Mission Profile</title>
-  <!-- Include QRCode.js from CDN for generating QR codes on the mission card -->
+  <!-- QRCode library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
-    .heading-with-logo {
-      display: flex;
-      align-items: center;      /* vertically centers text and logo */
-      justify-content: center;  /* keeps everything centered in the card */
-      gap: 6px;                 /* spacing between text and logo */
+    /* ===== Heading with Air Force symbol ===== */
+    .heading-with-logo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin:0 0 8px 0;
+    }
+    .af-logo-inline{
+      height:20px !important;       /* lock small size */
+      width:auto !important;
+      max-height:20px !important;
+      max-width:none !important;     /* ignore any global img max-width */
+      display:inline-block !important;
+      object-fit:contain !important;
+      flex:0 0 auto !important;
+    }
+    @media (max-width:420px){
+      .af-logo-inline{ height:18px !important; max-height:18px !important; }
     }
 
-    .af-logo-inline {
-      height: 20px !important;   /* lock the logo to text height */
-      width: auto !important;    /* keep proportions */
-      max-height: 20px !important;
-      max-width: none !important;
-      flex: 0 0 auto !important;
-      display: inline-block !important;
-      object-fit: contain !important;
-    }
-  </style>
-</head>
-
-
-
-
-    body {
+    /* ===== Page / quiz styles (your originals, tidied) ===== */
+    body{
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      color: #0d2b56; /* Dark blue text similar to ANG branding */
+      background-color:#f4f4f4;
+      margin:0;
+      padding:0;
+      color:#0d2b56; /* ANG-ish dark blue */
+    }
+    h1{
+      text-align:center;
+      margin-top:20px;
+      color:#0d2b56;
+    }
+    .container{
+      max-width:800px;
+      margin:20px auto;
+      background-color:#ffffff;
+      padding:20px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+      border-radius:8px;
+    }
+    .question{ margin-bottom:15px; }
+    .question label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:bold;
+    }
+    .question input[type="radio"]{ margin-right:8px; }
+
+    #generate-btn{
+      background-color:#0d2b56;
+      color:#ffffff;
+      border:none;
+      padding:12px 20px;
+      font-size:16px;
+      border-radius:4px;
+      cursor:pointer;
+    }
+    #generate-btn:hover{ background-color:#1c3d7a; }
+
+    /* Mission profile card */
+    #mission-card{
+      display:none;
+      max-width:600px;
+      margin:20px auto;
+      background-color:#f9f6f2;
+      border-radius:8px;
+      padding:20px;
+      box-shadow:0 0 8px rgba(0,0,0,0.1);
+    }
+    #mission-card h2{
+      margin-top:0;
+      font-size:28px;
+      color:#0d2b56;
     }
 
-    h1 {
-      text-align: center;
-      margin-top: 20px;
-      color: #0d2b56;
+    .profile-header{
+      display:flex;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .profile-header img{
+      width:100px;
+      height:100px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid #0d2b56;
+      margin-right:20px;
+    }
+    .profile-name{
+      font-size:24px;
+      font-weight:bold;
     }
 
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      background-color: #ffffff;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+    .career-path{ margin:10px 0; }
+    .career-path strong{
+      font-size:18px;
+      color:#0d2b56;
     }
 
-    .question {
-      margin-bottom: 15px;
+    .benefits{ margin:15px 0; }
+    .benefits ul{ list-style-type:disc; padding-left:20px; }
+    .benefits li{ margin-bottom:6px; }
+
+    .careers{ margin:15px 0; }
+    .careers ul{ list-style-type:none; padding-left:0; }
+    .careers li{
+      margin-bottom:10px;
+      border-left:4px solid #0d2b56;
+      padding-left:10px;
     }
 
-    .question label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+    .qr-section{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:20px;
+      gap:16px;
+    }
+    .qr-section img{ width:100px; height:100px; }
+
+    .footer-text{
+      font-size:18px;
+      font-weight:bold;
+      color:#ffffff;
+      background-color:#0d2b56;
+      padding:8px;
+      text-align:center;
+      border-radius:4px;
     }
 
-    .question input[type="radio"] {
-      margin-right: 8px;
+    .back-btn{
+      background-color:#0d2b56;
+      color:#ffffff;
+      border:none;
+      padding:10px 16px;
+      font-size:14px;
+      border-radius:4px;
+      cursor:pointer;
+      margin-top:15px;
     }
+    .back-btn:hover{ background-color:#1c3d7a; }
 
-    #generate-btn {
-      background-color: #0d2b56;
-      color: #ffffff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    #generate-btn:hover {
-      background-color: #1c3d7a;
-    }
-
-    /* Mission profile card styles */
-    #mission-card {
-      display: none;
-      max-width: 600px;
-      margin: 20px auto;
-      background-color: #f9f6f2;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    }
-
-    #mission-card h2 {
-      margin-top: 0;
-      font-size: 28px;
-      color: #0d2b56;
-    }
-
-    .profile-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .profile-header img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #0d2b56;
-      margin-right: 20px;
-    }
-
-    .profile-name {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .career-path {
-      margin: 10px 0;
-    }
-
-    .career-path strong {
-      font-size: 18px;
-      color: #0d2b56;
-    }
-
-    .benefits {
-      margin: 15px 0;
-    }
-
-    /* Recommended careers section */
-    .careers {
-      margin: 15px 0;
-    }
-    .careers ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    .careers li {
-      margin-bottom: 10px;
-      border-left: 4px solid #0d2b56;
-      padding-left: 10px;
-    }
-
-    .benefits ul {
-      list-style-type: disc;
-      padding-left: 20px;
-    }
-
-    .benefits li {
-      margin-bottom: 6px;
-    }
-
-    .qr-section {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-
-    .qr-section img {
-      width: 100px;
-      height: 100px;
-    }
-
-    .footer-text {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ffffff;
-      background-color: #0d2b56;
-      padding: 8px;
-      text-align: center;
-      border-radius: 4px;
-    }
-
-    .back-btn {
-      background-color: #0d2b56;
-      color: #ffffff;
-      border: none;
-      padding: 10px 16px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-
-    .back-btn:hover {
-      background-color: #1c3d7a;
-    }
-
-    /* Responsive design */
-    @media (max-width: 600px) {
-      .profile-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .profile-header img {
-        margin-bottom: 10px;
-      }
-      .qr-section {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .qr-section img {
-        margin-bottom: 10px;
-      }
+    /* Responsive */
+    @media (max-width:600px){
+      .profile-header{ flex-direction:column; align-items:flex-start; }
+      .profile-header img{ margin-bottom:10px; }
+      .qr-section{ flex-direction:column; align-items:flex-start; }
+      .qr-section img{ margin-bottom:10px; }
     }
   </style>
 </head>
+
 <body>
   <h1>PA Air National Guard Mission Profile Quiz</h1>
+
   <div class="container" id="quiz-section">
     <p>Answer a few quick questions to discover which career path in the Pennsylvania Air National Guard best matches your interests. Your personalized mission profile card will appear after you submit.</p>
+
     <form id="quiz-form">
-      <!-- Name input -->
+      <!-- Contact / lead fields -->
       <div class="question">
         <label for="name">Your First Name:</label>
         <input type="text" id="name" name="name" required placeholder="e.g. Alex">
       </div>
-      <!-- Last name input -->
       <div class="question">
         <label for="lastname">Your Last Name:</label>
         <input type="text" id="lastname" name="lastname" required placeholder="e.g. Smith">
       </div>
-      <!-- Contact fields for lead tracking -->
       <div class="question">
         <label for="email">Email Address:</label>
         <input type="email" id="email" name="email" required placeholder="e.g. alex@example.com">
@@ -237,8 +190,6 @@
         <label for="zip">ZIP Code:</label>
         <input type="text" id="zip" name="zip" required placeholder="e.g. 12345" pattern="\d{5}">
       </div>
-
-      <!-- Grade level for lead tracking -->
       <div class="question">
         <label for="grade">Grade Level:</label>
         <select id="grade" name="grade" required>
@@ -250,12 +201,12 @@
           <option value="College">College/Other</option>
         </select>
       </div>
-      <!-- Photo upload (optional) -->
       <div class="question">
         <label for="photo-input">Upload a photo (optional):</label>
         <input type="file" id="photo-input" accept="image/*">
       </div>
-      <!-- Question 1: favorite subject -->
+
+      <!-- Quiz questions -->
       <div class="question">
         <label>1. Which subject interests you the most?</label>
         <label><input type="radio" name="q1" value="technical" required> Science / Technology</label>
@@ -264,7 +215,7 @@
         <label><input type="radio" name="q1" value="medical"> Biology / Health</label>
         <label><input type="radio" name="q1" value="administrative"> Communications / Writing</label>
       </div>
-      <!-- Question 2: preferred work environment -->
+
       <div class="question">
         <label>2. What environment do you see yourself working in?</label>
         <label><input type="radio" name="q2" value="aviation" required> In the cockpit / on an aircraft</label>
@@ -273,7 +224,7 @@
         <label><input type="radio" name="q2" value="medical"> In a clinic helping people</label>
         <label><input type="radio" name="q2" value="administrative"> In an office managing information</label>
       </div>
-      <!-- Question 3: activity preference -->
+
       <div class="question">
         <label>3. Which activity appeals to you most?</label>
         <label><input type="radio" name="q3" value="mechanical" required> Repairing or maintaining machines</label>
@@ -282,7 +233,7 @@
         <label><input type="radio" name="q3" value="aviation"> Operating sophisticated aircraft systems</label>
         <label><input type="radio" name="q3" value="administrative"> Planning, organizing, or communicating</label>
       </div>
-      <!-- Question 4: biggest strength -->
+
       <div class="question">
         <label>4. What do you consider your greatest strength?</label>
         <label><input type="radio" name="q4" value="technical" required> Problem solving with technology</label>
@@ -291,398 +242,10 @@
         <label><input type="radio" name="q4" value="medical"> Empathy and caring for others</label>
         <label><input type="radio" name="q4" value="administrative"> Organizing and coordinating people</label>
       </div>
-      <!-- Question 5: interest in protecting security -->
+
       <div class="question">
         <label>5. How interested are you in protecting others and enforcing security?</label>
         <label><input type="radio" name="q5" value="security" required> Very interested</label>
         <label><input type="radio" name="q5" value="technical"> Interested in cyber security</label>
         <label><input type="radio" name="q5" value="mechanical"> I prefer equipment security</label>
-        <label><input type="radio" name="q5" value="medical"> I'm more focused on caregiving</label>
-        <label><input type="radio" name="q5" value="administrative"> I'd rather handle logistics</label>
-      </div>
-
-      <!-- Question 6: extracurricular activity preference -->
-      <div class="question">
-        <label>6. Which extracurricular activity do you relate to most?</label>
-        <label><input type="radio" name="q6" value="mechanical" required> Robotics club or engineering projects</label>
-        <label><input type="radio" name="q6" value="technical"> Cybersecurity or coding clubs</label>
-        <label><input type="radio" name="q6" value="medical"> Health or science clubs</label>
-        <label><input type="radio" name="q6" value="administrative"> Student government or yearbook</label>
-        <label><input type="radio" name="q6" value="aviation"> Junior ROTC or aviation club</label>
-        <label><input type="radio" name="q6" value="security"> School safety patrol or martial arts</label>
-      </div>
-
-      <!-- Question 7: role in group projects -->
-      <div class="question">
-        <label>7. When you work on group projects, what role do you usually take?</label>
-        <label><input type="radio" name="q7" value="technical" required> Solving technical problems or coding</label>
-        <label><input type="radio" name="q7" value="mechanical"> Building or assembling parts</label>
-        <label><input type="radio" name="q7" value="medical"> Supporting classmates who need help</label>
-        <label><input type="radio" name="q7" value="administrative"> Organizing tasks and coordinating schedules</label>
-        <label><input type="radio" name="q7" value="aviation"> Leading and coordinating overall direction</label>
-        <label><input type="radio" name="q7" value="security"> Ensuring rules are followed and team stays safe</label>
-      </div>
-
-      <!-- Question 8: type of challenges -->
-      <div class="question">
-        <label>8. What kind of challenges excite you the most?</label>
-        <label><input type="radio" name="q8" value="technical" required> Complex puzzles or coding challenges</label>
-        <label><input type="radio" name="q8" value="security"> Physical obstacles and fitness goals</label>
-        <label><input type="radio" name="q8" value="mechanical"> Hands‑on tasks like fixing or building</label>
-        <label><input type="radio" name="q8" value="medical"> Helping someone overcome difficulties</label>
-        <label><input type="radio" name="q8" value="aviation"> Learning to fly or operate complex systems</label>
-        <label><input type="radio" name="q8" value="administrative"> Managing a team or planning an event</label>
-      </div>
-      <div style="text-align:center; margin-top:20px;">
-        <button type="submit" id="generate-btn">See My Mission Profile</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Mission profile card container -->
-  <div id="mission-card" class="container">
-  <h2 class="heading-with-logo">
-<h2 class="heading-with-logo">
- <h2 class="heading-with-logo">
-<h2 class="heading-with-logo">
-  <span>Your Mission Profile</span>
-  <img
-    src="https://www.pngall.com/wp-content/uploads/13/Air-Force-Logo-PNG-Clipart.png"
-    alt="U.S. Air Force Symbol"
-    class="af-logo-inline"
-  />
-</h2>
-
-
-
-
-    <div class="profile-header">
-      <!-- The profile photo container. The src will be set dynamically or remain blank for a placeholder. -->
-      <img id="profile-photo" src="" alt="" style="background-color:#dcdcdc;">
-      <div>
-        <div class="profile-name" id="profile-name">Alex</div>
-      </div>
-    </div>
-    <div class="career-path" id="career-path">
-      <strong>AFSC: 1A1X1 – Flight Engineer</strong>
-      <p id="career-desc">Oversees aircraft systems and performance</p>
-    </div>
-    <div class="benefits">
-      <strong>Benefits</strong>
-      <ul id="benefits-list">
-        <li>College Tuition</li>
-        <li>Technical Training</li>
-        <li>Travel Opportunities</li>
-      </ul>
-    </div>
-    <!-- Recommended careers list -->
-    <div class="careers">
-      <strong>Career Recommendations</strong>
-      <ul id="careers-list"></ul>
-    </div>
-    <div class="qr-section">
-      <div id="qrcode"></div>
-      <div class="footer-text">PENNSYLVANIA<br>AIR NATIONAL GUARD</div>
-    </div>
-    <button class="back-btn" id="start-over">Start Over</button>
-  </div>
-
-  <!-- Hidden form for email submission using FormSubmit -->
-  <!--
-    This form is hidden from the user. After the mission profile card is displayed,
-    the script will populate these fields with the applicant's information and
-    recommended career data, then submit the form to FormSubmit. The submissions
-    will be emailed to the address specified in the action attribute. Replace
-    "your-email@example.com" with the email address where you want to receive leads.
-  -->
-    },
-    dataType: "json"
-});
-  <script>
-    // Predefined career mappings by category
-    const careers = {
-      aviation: {
-        name: "1A1X1 – Flight Engineer",
-        title: "Flight Engineer",
-        description: "Oversees aircraft systems and performance",
-        benefits: ["College Tuition", "Technical Training", "Travel Opportunities"]
-      },
-      mechanical: {
-        name: "2A6X1C – Aerospace Propulsion",
-        title: "Aerospace Propulsion",
-        description: "Maintains and repairs aircraft engines",
-        benefits: ["Technical Training", "Hands‑On Experience", "Career Advancement"]
-      },
-      technical: {
-        name: "1D7X1 – Cyber Defense Operations",
-        title: "Cyber Defense Operations",
-        description: "Protects Air Force networks and systems",
-        benefits: ["Cutting‑Edge Skills", "Technical Training", "Career Mobility"]
-      },
-      medical: {
-        name: "4N0X1 – Aerospace Medical Service",
-        title: "Aerospace Medical Service",
-        description: "Provides medical care for service members",
-        benefits: ["Healthcare Skills", "College Tuition", "Technical Training"]
-      },
-      administrative: {
-        name: "3F0X1 – Personnel Specialist",
-        title: "Personnel Specialist",
-        description: "Manages personnel records and resources",
-        benefits: ["Leadership Development", "Education Benefits", "Community Impact"]
-      },
-      security: {
-        name: "3P0X1 – Security Forces",
-        title: "Security Forces",
-        description: "Protects bases and personnel",
-        benefits: ["Law Enforcement Skills", "Physical Training", "Travel Opportunities"]
-      }
-    };
-
-    // Full job list data. Each entry represents a career field with its AFSC,
-    // ASVAB requirement, tech school length, and location. The interest_category
-    // corresponds to more granular categories provided in the user-supplied list.
-    const allJobs = [
-      { career_field: "Mobility Force Aviator (In-Flight Refueling)", interest_category: "aviation", afsc: "1A1X2H", asvab_score: "M60", tech_school_length: "24W", tech_school_location: "ALTUS" },
-      { career_field: "Aviation Resource Management", interest_category: "aviation", afsc: "1C0X2", asvab_score: "A50", tech_school_length: "5W", tech_school_location: "KEESLER" },
-      { career_field: "Air Traffic Control (258)*", interest_category: "aviation", afsc: "1C1X1", asvab_score: "G55", tech_school_length: "14W", tech_school_location: "KEESLER" },
-      { career_field: "Command and Control Operations", interest_category: "technology", afsc: "1C3X1", asvab_score: "A55 & G57", tech_school_length: "6W", tech_school_location: "KEESLER" },
-      { career_field: "Airfield Management", interest_category: "aviation", afsc: "1C7X1", asvab_score: "M40 & G50", tech_school_length: "6W", tech_school_location: "KEESLER" },
-      { career_field: "Radar, Airfield & Weather Systems (258)", interest_category: "technology", afsc: "1C8X3", asvab_score: "E70", tech_school_length: "28W", tech_school_location: "KEESLER" },
-      { career_field: "Cyber Defense Operations", interest_category: "technology", afsc: "1D7X1", asvab_score: "M45 & E60 or M45, E55 & Cyber", tech_school_length: "60", tech_school_location: "KEESLER" },
-      { career_field: "Spectrum Operations", interest_category: "technology", afsc: "1D7X2F", asvab_score: "E:60", tech_school_length: "8W", tech_school_location: "KEESLER" },
-      { career_field: "Operations Intelligence", interest_category: "technology", afsc: "1N0X1", asvab_score: "A64", tech_school_length: "22W", tech_school_location: "GOODFELLOW" },
-      { career_field: "Aircrew Flight Equipment", interest_category: "aviation", afsc: "1P0X1", asvab_score: "M40", tech_school_length: "11W", tech_school_location: "SHEPPARD" },
-      { career_field: "Safety *Prior Service ONLY (258 & 171)", interest_category: "safety", afsc: "1S0X1", asvab_score: "A57", tech_school_length: "7W", tech_school_location: "LACKLAND" },
-      { career_field: "Weather", interest_category: "weather", afsc: "1W0X1", asvab_score: "G66 or E50", tech_school_length: "29W", tech_school_location: "KEESLER" },
-      { career_field: "Refuel Aircraft Mait (Crew Chief)", interest_category: "aviation", afsc: "2A5X4A", asvab_score: "M47", tech_school_length: "12W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aerospace Propulsion", interest_category: "maintenance", afsc: "2A6X1C", asvab_score: "M56", tech_school_length: "10W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aerospace Ground Equipment", interest_category: "maintenance", afsc: "2A6X2", asvab_score: "M47 & E28", tech_school_length: "19W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aircraft Fuel Systems", interest_category: "maintenance", afsc: "2A6X4", asvab_score: "M47", tech_school_length: "7W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aircraft Hydraulics Systems", interest_category: "maintenance", afsc: "2A6X5", asvab_score: "M56", tech_school_length: "9W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aircraft Electrical and Environmental", interest_category: "maintenance", afsc: "2A6X6", asvab_score: "M41 & E61", tech_school_length: "18W", tech_school_location: "SHEPPARD" },
-      { career_field: "Aircraft Metals Technology", interest_category: "maintenance", afsc: "2A7X1", asvab_score: "M47", tech_school_length: "13W", tech_school_location: "SHEPPARD" },
-      { career_field: "Non Destructive Inspection", interest_category: "maintenance", afsc: "2A7X2", asvab_score: "M:42", tech_school_length: "9W", tech_school_location: "PENSACOLA" },
-      { career_field: "Aircraft Structural Maintenance", interest_category: "maintenance", afsc: "2A7X3", asvab_score: "M:47", tech_school_length: "15W", tech_school_location: "PENSACOLA" },
-      { career_field: "Heavy Aircraft Integrated Avionics", interest_category: "maintenance", afsc: "2A9X4", asvab_score: "E:70", tech_school_length: "23W", tech_school_location: "SHEPPARD" },
-      { career_field: "Fuels", interest_category: "logistics", afsc: "2F0X1", asvab_score: "M:47 & G:38", tech_school_length: "6W", tech_school_location: "SHEPPARD" },
-      { career_field: "Logistics Plans", interest_category: "logistics", afsc: "2G0X1", asvab_score: "A:56", tech_school_length: "5W", tech_school_location: "LACKLAND" },
-      { career_field: "Maintenance Management", interest_category: "operations", afsc: "2R2X1", asvab_score: "G:55", tech_school_length: "11W", tech_school_location: "SHEPPARD" },
-      { career_field: "Materiel Management (258 & 171)", interest_category: "logistics", afsc: "2S0X1", asvab_score: "A:41 or G:44", tech_school_length: "6W", tech_school_location: "LACKLAND" },
-      { career_field: "Traffic Management", interest_category: "logistics", afsc: "2T0X1", asvab_score: "A:35", tech_school_length: "8W", tech_school_location: "FT LEE" },
-      { career_field: "Vehicle Operations/Ground transportation", interest_category: "logistics", afsc: "2T1X1", asvab_score: "M:40", tech_school_length: "6W", tech_school_location: "FT LEONARD WOOD" },
-      { career_field: "Air Transportation", interest_category: "aviation", afsc: "2T2X1", asvab_score: "M:47 & A:28", tech_school_length: "5W", tech_school_location: "FT LEE" },
-      { career_field: "Mission Generation Vehicular Equipment Maintenance", interest_category: "maintenance", afsc: "2T3X1", asvab_score: "M:47", tech_school_length: "15W", tech_school_location: "PORT HUENEME" },
-      { career_field: "Special Vehicle Maintenance/Fire Truck", interest_category: "maintenance", afsc: "2T3X1A", asvab_score: "M:40", tech_school_length: "18W", tech_school_location: "PORT HUENEME" },
-      { career_field: "Specialized Vehicle Maintenance MHE", interest_category: "maintenance", afsc: "2T3X1C", asvab_score: "M:40", tech_school_length: "16W", tech_school_location: "PORT HUENEME" },
-      { career_field: "Vehicle Management Analysis", interest_category: "logistics", afsc: "2T3X7", asvab_score: "A:41", tech_school_length: "6W", tech_school_location: "LACKLAND" },
-      { career_field: "Munitions Systems", interest_category: "logistics", afsc: "2W0X1", asvab_score: "M:60 or G:57", tech_school_length: "8W", tech_school_location: "SHEPPARD" },
-      { career_field: "Electrical Systems", interest_category: "engineering", afsc: "3E0X1", asvab_score: "M:43 & E:45", tech_school_length: "19W", tech_school_location: "SHEPPARD" },
-      { career_field: "Electrical Power Production (258 & 171)", interest_category: "engineering", afsc: "3E0X2", asvab_score: "M:56 & E:40", tech_school_length: "11W", tech_school_location: "SHEPPARD" },
-      { career_field: "Heating, Ventilation, Air Conditioning (258 & 171)", interest_category: "engineering", afsc: "3E1X1", asvab_score: "M:55 or E:45", tech_school_length: "19W", tech_school_location: "SHEPPARD" },
-      { career_field: "Pavements and Construction Equipment", interest_category: "engineering", afsc: "3E2X1", asvab_score: "M:40", tech_school_length: "13W", tech_school_location: "FT LEONARD WOOD" },
-      { career_field: "Structural", interest_category: "engineering", afsc: "3E3X1", asvab_score: "M:47", tech_school_length: "18W", tech_school_location: "GULFPORT" },
-      { career_field: "Water and Fuel Systems Mait", interest_category: "engineering", afsc: "3E4X1", asvab_score: "M:47 & E:28", tech_school_length: "17W", tech_school_location: "SHEPPARD" },
-      { career_field: "Engineering (2 Phases)", interest_category: "engineering", afsc: "3E5X1", asvab_score: "G:49", tech_school_length: "14W", tech_school_location: "FT LEONARD WOOD" },
-      { career_field: "Operations Management", interest_category: "operations", afsc: "3E6X1", asvab_score: "G:44", tech_school_length: "6W", tech_school_location: "SHEPPARD" },
-      { career_field: "Fire Protection*", interest_category: "safety", afsc: "3E7X1", asvab_score: "G:57", tech_school_length: "13W", tech_school_location: "GOODFELLOW" },
-      { career_field: "Emergency Management", interest_category: "safety", afsc: "3E9X1", asvab_score: "G:62", tech_school_length: "14W", tech_school_location: "FT LEONARD WOOD" },
-      { career_field: "Personnel (258 & 171)", interest_category: "administration", afsc: "3F0X1", asvab_score: "A:59", tech_school_length: "5W", tech_school_location: "KEESLER" },
-      { career_field: "Services", interest_category: "administration", afsc: "3F1X1", asvab_score: "G:24", tech_school_length: "5W", tech_school_location: "FT LEE" },
-      { career_field: "Education & Training * Prior Service ONLY (258&171)", interest_category: "education", afsc: "3F2X1", asvab_score: "A:62", tech_school_length: "5W", tech_school_location: "SHEPPARD" },
-      { career_field: "Equal Opportunity and Treatment *PS ONLY", interest_category: "administration", afsc: "3F4X1", asvab_score: "A:41 or G:44", tech_school_length: "12W", tech_school_location: "PATRICK" },
-      { career_field: "Administration (258 and 171)", interest_category: "administration", afsc: "3F5X1", asvab_score: "A:55", tech_school_length: "8W", tech_school_location: "KEESLER" },
-      { career_field: "Public Affairs", interest_category: "communications", afsc: "3N0X6", asvab_score: "G:72", tech_school_length: "15W", tech_school_location: "FT MEADE" },
-      { career_field: "Security Forces", interest_category: "safety", afsc: "3P0X1", asvab_score: "G:30", tech_school_length: "13W", tech_school_location: "LACKLAND" },
-      { career_field: "Health Services Management", interest_category: "medical", afsc: "4A0X1", asvab_score: "G:44", tech_school_length: "7W", tech_school_location: "FT SAM" },
-      { career_field: "Medical Material", interest_category: "medical", afsc: "4A1X1", asvab_score: "A:48", tech_school_length: "4W", tech_school_location: "FT SAM" },
-      { career_field: "Biomedical Equipment", interest_category: "medical", afsc: "4A2X1", asvab_score: "M:60 E:70", tech_school_length: "41W", tech_school_location: "FT SAM" },
-      { career_field: "Bioenvironmental Engineering", interest_category: "engineering", afsc: "4B0X1", asvab_score: "G:49", tech_school_length: "13W", tech_school_location: "WRIGHT PATTERSON" },
-      { career_field: "Diet Therapy", interest_category: "medical", afsc: "4D0X1", asvab_score: "G:44", tech_school_length: "6W", tech_school_location: "FT SAM" },
-      { career_field: "Public Health", interest_category: "medical", afsc: "4E0X1", asvab_score: "A:48", tech_school_length: "9W", tech_school_location: "WRIGHT PATTERSON" },
-      { career_field: "Aerospace Medical Service", interest_category: "medical", afsc: "4N0X1", asvab_score: "G:50", tech_school_length: "19W", tech_school_location: "FT SAM" },
-      { career_field: "Pharmacy Technician", interest_category: "medical", afsc: "4P0X1", asvab_score: "A:48", tech_school_length: "22W", tech_school_location: "FT SAM" },
-      { career_field: "Dental Assistant", interest_category: "medical", afsc: "4Y0X1", asvab_score: "G:44", tech_school_length: "9W", tech_school_location: "FT SAM" },
-      { career_field: "Paralegal *", interest_category: "legal", afsc: "5J0X1", asvab_score: "G:51", tech_school_length: "7W", tech_school_location: "MAXWELL" },
-      { career_field: "Chaplain Assistant * Prior Service ONLY", interest_category: "special services", afsc: "5R0X1", asvab_score: "A:35 or G:44", tech_school_length: "6W", tech_school_location: "MAXWELL" },
-      { career_field: "Contracting", interest_category: "finance", afsc: "6C0X1", asvab_score: "G:72", tech_school_length: "8W", tech_school_location: "LACKLAND" },
-      { career_field: "Financial Management and Comptroller", interest_category: "finance", afsc: "6F0X1", asvab_score: "G:57", tech_school_length: "11W", tech_school_location: "KEESLER" }
-    ];
-
-    // Mapping from granular interest categories to the six main categories used in the quiz
-    const categoryMap = {
-      aviation: "aviation",
-      technology: "technical",
-      safety: "security",
-      weather: "technical",
-      maintenance: "mechanical",
-      logistics: "mechanical",
-      operations: "mechanical",
-      engineering: "mechanical",
-      administration: "administrative",
-      education: "administrative",
-      communications: "administrative",
-      medical: "medical",
-      legal: "administrative",
-      "special services": "administrative",
-      finance: "administrative"
-    };
-
-    // Handle form submission
-    document.getElementById('quiz-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      // Gather responses and contact information
-      const firstName = document.getElementById('name').value.trim() || 'Recruit';
-      const lastName = document.getElementById('lastname').value.trim();
-      // Combine first and last names for display; if last name is missing, show first name only
-      const fullName = (firstName + ' ' + (lastName || '')).trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const zip = document.getElementById('zip').value.trim();
-      const grade = document.getElementById('grade').value;
-      const responses = {};
-      // Include all quiz questions. This quiz now has eight questions (q1–q8).
-      ['q1','q2','q3','q4','q5','q6','q7','q8'].forEach(q => {
-        const selected = document.querySelector(`input[name="${q}"]:checked`);
-        if (selected) {
-          responses[q] = selected.value;
-        }
-      });
-      // Tally categories
-      const scores = { aviation: 0, mechanical: 0, technical: 0, medical: 0, administrative: 0, security: 0 };
-      Object.values(responses).forEach(value => {
-        if (scores.hasOwnProperty(value)) {
-          scores[value]++;
-        }
-      });
-      // Determine top category; if tie, choose the first one appearing
-      let topCategory = 'aviation';
-      let maxScore = -1;
-      for (const category in scores) {
-        if (scores[category] > maxScore) {
-          maxScore = scores[category];
-          topCategory = category;
-        }
-      }
-      // Determine recommended jobs based on the top category BEFORE populating the card.
-      // Filter the full job list by the mapped category and select up to three jobs.
-      const recommendedJobs = allJobs.filter(job => categoryMap[job.interest_category] === topCategory);
-      const topJobs = recommendedJobs.slice(0, 3);
-      // Determine the generic career benefits based on the top category.
-      const career = careers[topCategory];
-      // Populate the mission card name with the applicant's name.
-      document.getElementById('profile-name').textContent = fullName || firstName;
-      // Use the first recommended job for the main career display if available,
-      // otherwise fall back to showing the category name.
-      if (topJobs.length > 0) {
-        const primary = topJobs[0];
-        document.getElementById('career-path').querySelector('strong').textContent =
-          `AFSC: ${primary.afsc} – ${primary.career_field}`;
-        // Provide a descriptive line using the ASVAB requirement and tech school info.
-        document.getElementById('career-desc').textContent =
-          `Requires ASVAB ${primary.asvab_score}. Tech school length: ${primary.tech_school_length} at ${primary.tech_school_location}.`;
-      } else {
-        document.getElementById('career-path').querySelector('strong').textContent =
-          `Category: ${topCategory}`;
-        document.getElementById('career-desc').textContent = '';
-      }
-      // Populate the benefits list for the selected career category.
-      const benefitsList = document.getElementById('benefits-list');
-      benefitsList.innerHTML = '';
-      career.benefits.forEach(b => {
-        const li = document.createElement('li');
-        li.textContent = b;
-        benefitsList.appendChild(li);
-      });
-      // Populate the recommended careers list with up to three jobs.
-      const careersList = document.getElementById('careers-list');
-      careersList.innerHTML = '';
-      topJobs.forEach(job => {
-        const li = document.createElement('li');
-        li.innerHTML =
-          `<strong>AFSC: ${job.afsc} – ${job.career_field}</strong><br>` +
-          `ASVAB: ${job.asvab_score}<br>` +
-          `Tech School: ${job.tech_school_length} ${job.tech_school_location}`;
-        careersList.appendChild(li);
-      });
-      // Show mission card, hide quiz
-      document.getElementById('quiz-section').style.display = 'none';
-      document.getElementById('mission-card').style.display = 'block';
-      // Load profile photo if uploaded
-      const photoInput = document.getElementById('photo-input');
-      const profilePhoto = document.getElementById('profile-photo');
-      if (photoInput.files && photoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          profilePhoto.src = e.target.result;
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-      } else {
-        profilePhoto.src = 'https://via.placeholder.com/100';
-      }
-     // Always generate QR code pointing to Popl
-const qrcodeDiv = document.getElementById('qrcode');
-qrcodeDiv.innerHTML = '';
-// If an old instance exists:
-if (qrcodeDiv.__qrcode__) { qrcodeDiv.__qrcode__.clear(); } // some builds store instance
-const qr = new QRCode(qrcodeDiv, {
-  text: "https://poplme.co/041C0432721195/ccqr",
-  width: 100,
-  height: 100,
-  colorDark : "#0d2b56",
-  colorLight : "#ffffff",
-  correctLevel : QRCode.CorrectLevel.H
-});
-// keep a reference so later code can .clear() instead of re-adding
-qrcodeDiv.__qrcode__ = qr;
-
-
-      // Save lead information to local storage for tracking
-      try {
-        const leads = JSON.parse(localStorage.getItem('pa_ang_leads') || '[]');
-        leads.push({
-          firstName: firstName || '',
-          lastName: lastName || '',
-          email: email || '',
-          phone: phone || '',
-          zip: zip || '',
-          grade: grade || '',
-          category: topCategory,
-          career: career.name,
-          recommendations: topJobs.map(job => job.afsc)
-        });
-        localStorage.setItem('pa_ang_leads', JSON.stringify(leads));
-      } catch (err) {
-        // If localStorage is unavailable or errors, fail silently
-        console.warn('Could not save lead:', err);
-      }
-
-      // Populate and submit the hidden email form to FormSubmit
-      // The hidden form is used to send the applicant's information via email.
-      try {
-        // Set values for hidden fields
-        document.getElementById('emailFormFirstName').value = firstName;
-        document.getElementById('emailFormLastName').value  = lastName;
-        document.getElementById('emailFormPhone').value     = phone;
-        document.getElementById('emailFormEmail').value     = email;
-        document.getElementById('emailFormZip').value       = zip;
-        document.getElementById('emailFormGrade').value     = grade;
-        document.getElementById('emailFormCategory').value  = topCategory;
-        document.getElementById('emailFormAFSC').value      = (topJobs.length > 0 ? topJobs[0].afsc : '');
-        // Submit the hidden form (sends an email via FormSubmit)
-        document.getElementById('email-form').submit();
-      } catch (err) {
-        console.warn('Could not send email via FormSubmit:', err);
-      }
-    });
-
-    // Handle start over button
-    document.getElementById('start-over').addEventListener('click', function() {
-      document.getElementById('mission-card').style.display = 'none';
-      document.getElementById('quiz-section').style.display = 'block';
-      document.getElementById('quiz-form').reset();
-      document.getElementById('qrcode').innerHTML = '';
-    });
-  </script>
-</body>
-</html>
+        <label><input type="radio
