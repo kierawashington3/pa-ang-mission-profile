@@ -7,23 +7,22 @@
   <!-- Include QRCode.js from CDN for generating QR codes on the mission card -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-   .heading-with-logo {
-  display: flex;
-  align-items: center;      /* vertically align text + logo */
-  justify-content: center;  /* center them together in the card */
-  gap: 12px;                /* spacing between text and logo */
+  #resultCard h2.heading-with-logo {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
 }
 
-.heading-with-logo span {
-  font-size: clamp(18px, 3vw, 24px);
-  font-weight: 600;
+#resultCard .af-logo-inline {
+  max-height: 40px !important; /* tweak if needed */
+  width: auto !important;
+  display: block !important;
+  flex: 0 0 auto !important;
 }
-
-.af-logo-inline {
-  max-height: 40px;  /* adjust until it visually matches text size */
-  width: auto;
-}
-
 
 
     body {
@@ -339,6 +338,7 @@
   <!-- Mission profile card container -->
   <div id="mission-card" class="container">
   <h2 class="heading-with-logo">
+<h2 class="heading-with-logo">
   <span>Your Mission Profile</span>
   <img
     src="https://www.pngall.com/wp-content/uploads/13/Air-Force-Logo-PNG-Clipart.png"
@@ -346,6 +346,7 @@
     class="af-logo-inline"
   />
 </h2>
+
 
 
     <div class="profile-header">
