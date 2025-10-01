@@ -584,24 +584,18 @@
       } else {
         profilePhoto.src = 'https://via.placeholder.com/100';
       }
-      // Generate QR code that works even when this file is viewed locally.
-      const url = "https://poplme.co/041C0432721195/ccqr";
-      const qrcodeDiv = document.getElementById('qrcode');
-      qrcodeDiv.innerHTML = '';
-      // Set your recruitment page URL here. Replace with the hosted quiz URL or a general PA ANG page.
-      const defaultQRLink = 'https://www.goang.com/';
-      const currentURL = window.location.href;
-      // Determine if the current URL is a local file path
-      const isLocal = currentURL.startsWith('file:');
-      const qrText = isLocal ? defaultQRLink : currentURL;
-      new QRCode(qrcodeDiv, {
-        text: qrText,
-        width: 100,
-        height: 100,
-        colorDark : "#0d2b56",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      });
+      // Always generate QR code pointing to Popl
+const qrcodeDiv = document.getElementById('qrcode');
+qrcodeDiv.innerHTML = '';
+
+new QRCode(qrcodeDiv, {
+  text: "https://poplme.co/041C0432721195/ccqr",
+  width: 100,
+  height: 100,
+  colorDark : "#0d2b56",  // ANG blue tone
+  colorLight : "#ffffff",
+  correctLevel : QRCode.CorrectLevel.H
+});
 
       // Save lead information to local storage for tracking
       try {
